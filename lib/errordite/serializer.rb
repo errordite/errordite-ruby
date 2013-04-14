@@ -32,11 +32,11 @@ class Errordite::Serializer
   private
 
   def special_attributes
-    context.select {|k, v| SPECIAL_CONTEXT_ATTRIBUTES.include?(k) }
+    Hash[context.select {|k, v| SPECIAL_CONTEXT_ATTRIBUTES.include?(k) }]
   end
 
   def exception_data
-    context.reject {|k, v| SPECIAL_CONTEXT_ATTRIBUTES.include?(k) }
+    Hash[context.reject {|k, v| SPECIAL_CONTEXT_ATTRIBUTES.include?(k) }]
   end
 
   def timestamp
