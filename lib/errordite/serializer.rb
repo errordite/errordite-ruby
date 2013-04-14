@@ -17,6 +17,7 @@ class Errordite::Serializer
       "TimestampUtc" => Time.now.strftime("%Y-%m-%d %H:%M:%S"),
       "ExceptionInfo" => {
         "Source" => source,
+        "Message" => exception.message,
         "MethodName" => method_name,
         "ExceptionType" => exception.class.name,
         "StackTrace" => stack_trace,

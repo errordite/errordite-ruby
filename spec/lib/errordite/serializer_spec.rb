@@ -32,6 +32,11 @@ describe Errordite::Serializer do
       expect(serializer.as_json['ExceptionInfo']['ExceptionType']).to eql('FloatDomainError')
     end
 
+    it 'takes Message from exception message' do
+      exception.stub(:message).and_return("My message is this")
+      expect(serializer.as_json['ExceptionInfo']['Message']).to eql('My message is this')
+    end
+
     ['MachineName', 'Url', 'UserAgent', 'Version'].each do |special_attribute|
       it "adds #{special_attribute} to top level if included in context" do
         context[special_attribute] = "special-attribute-value"
