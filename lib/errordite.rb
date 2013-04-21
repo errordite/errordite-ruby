@@ -2,24 +2,25 @@ require 'errordite/version'
 
 module Errordite
   autoload :Client, 'errordite/client'
+  autoload :Config, 'errordite/config'
   autoload :Rack, 'errordite/rack'
   autoload :Serializer, 'errordite/serializer'
 
   class << self
-    def api_token
-      @api_token ||= ENV['ERRORDITE_TOKEN']
+    def config
+      @config ||= Config.new
     end
 
-    def api_token=(token)
-      @api_token = token
+    def config=(config)
+      @config = config
     end
 
-    def client
-      @client ||= Client.new
-    end
-
-    def client=(client)
-      @client = client
+    def method_missing(method, *args)
+      if config.respond_to?(method)
+        config.__send__ method, *args
+      else
+        super
+      end
     end
 
     def record(error, context = {})

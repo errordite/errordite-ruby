@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'errordite/client'
 
 describe Errordite::Client do
   let(:connection) { double(:connection) }

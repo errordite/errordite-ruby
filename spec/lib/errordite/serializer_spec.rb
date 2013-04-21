@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'errordite/serializer'
 
 describe Errordite::Serializer do
   describe '(in general)' do
