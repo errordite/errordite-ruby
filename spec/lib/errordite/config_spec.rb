@@ -33,6 +33,13 @@ describe Errordite::Config do
     expect(subject.api_token).to eql('overidden-token')
   end
 
+  it 'logs to STDOUT with log level of WARN by default' do
+    logger = double('logger')
+    Logger.should_receive(:new).with(STDOUT).and_return(logger)
+    logger.should_receive(:level=).with(Logger::WARN)
+    expect(subject.logger).to eql(logger)
+  end
+
   it 'builds client with server and port' do
     subject.server = 'errordite.example.com'
     subject.port = 123

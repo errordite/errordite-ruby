@@ -1,4 +1,5 @@
 require 'errordite'
+require 'logger'
 
 class Errordite::Config
   def api_token
@@ -23,6 +24,14 @@ class Errordite::Config
 
   def port=(p)
     @port = p
+  end
+
+  def logger
+    @logger ||= begin
+      l = Logger.new(STDOUT)
+      l.level = Logger::WARN
+      l
+    end
   end
 
   def client

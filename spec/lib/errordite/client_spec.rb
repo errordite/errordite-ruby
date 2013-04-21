@@ -1,16 +1,38 @@
 require 'spec_helper'
 
 describe Errordite::Client do
+  let(:logger) { double(:logger) }
   let(:connection) { double(:connection) }
+  let(:response) { double(:response, code: '201', message: 'Created') }
+
+  before :each do
+    Errordite::Client::Connection.stub(:new).and_return(connection)
+    connection.stub(:post).and_return(response)
+  end
 
   it 'sends json to the server by posting through a new connection' do
-    Errordite::Client::Connection.stub(:new).and_return(connection)
     path = '/receiveerror'
     body = '{}'
     connection.should_receive(:post).with(
       '/receiveerror', '{}', 'Content-Type' => 'application/json; charset=utf-8', 'Content-Length' => '2'
-    )
+    ).and_return(response)
     Errordite::Client.new.send_json(path, body)
+  end
+
+  it 'logs response if code != 201' do
+    client = Errordite::Client.new('server.example.com', 443, logger)
+    response.stub(:code).and_return('500')
+    response.stub(:message).and_return('Server Error')
+    logger.should_receive(:warn)
+    client.send_json '/receiveerror', ''
+  end
+
+  it 'logs response if log level is debug' do
+    client = Errordite::Client.new('server.example.com', 443, logger)
+    response.stub(:code).and_return('500')
+    response.stub(:message).and_return('Server Error')
+    logger.should_receive(:warn)
+    client.send_json '/receiveerror', ''
   end
 end
 
