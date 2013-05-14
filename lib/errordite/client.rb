@@ -9,8 +9,13 @@ class Errordite::Client
     @logger = logger
   end
 
-  def send_json(path, body)
-    response = Connection.new(server, port).post path, body, 'Content-Type' => 'application/json; charset=utf-8', 'Content-Length' => body.size.to_s
+  def record(error, context)
+    post_json '/receiveerror', Errordite::Serializer.new(error, context).to_json
+  end
+
+  def post_json(path, body)
+    headers = {'Content-Type' => 'application/json; charset=utf-8', 'Content-Length' => body.size.to_s}
+    response = Connection.new(server, port).post path, body, headers
     log_response response
     response
   end

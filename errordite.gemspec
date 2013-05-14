@@ -10,10 +10,9 @@ Gem::Specification.new do |spec|
   spec.email         = ["tom@popdog.net"]
   spec.description   = %q{A ruby client for www.errordite.com}
   spec.summary       = %q{A ruby client for www.errordite.com}
-  spec.homepage      = ""
+  spec.homepage      = "https://www.errordite.com"
   spec.license       = "MIT"
-
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files`.split($/) - ["lib/errordite-rack.rb"]
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]

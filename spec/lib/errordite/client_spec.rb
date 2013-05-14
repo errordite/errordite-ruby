@@ -10,13 +10,22 @@ describe Errordite::Client do
     connection.stub(:post).and_return(response)
   end
 
+  it 'records errors by posting them to /receiveerror' do
+    error = double(:error)
+    context = double(:context)
+    serializer = double(:serializer, to_json: 'json-representation')
+    Errordite::Serializer.stub(:new).with(error, context).and_return(serializer)
+    subject.should_receive(:post_json).with('/receiveerror', 'json-representation')
+    subject.record(error, context)
+  end
+
   it 'sends json to the server by posting through a new connection' do
     path = '/receiveerror'
     body = '{}'
     connection.should_receive(:post).with(
       '/receiveerror', '{}', 'Content-Type' => 'application/json; charset=utf-8', 'Content-Length' => '2'
     ).and_return(response)
-    Errordite::Client.new.send_json(path, body)
+    Errordite::Client.new.post_json(path, body)
   end
 
   it 'logs response if code != 201' do
@@ -24,7 +33,7 @@ describe Errordite::Client do
     response.stub(:code).and_return('500')
     response.stub(:message).and_return('Server Error')
     logger.should_receive(:warn)
-    client.send_json '/receiveerror', ''
+    client.post_json '/receiveerror', ''
   end
 
   it 'logs response if log level is debug' do
@@ -32,7 +41,7 @@ describe Errordite::Client do
     response.stub(:code).and_return('500')
     response.stub(:message).and_return('Server Error')
     logger.should_receive(:warn)
-    client.send_json '/receiveerror', ''
+    client.post_json '/receiveerror', ''
   end
 end
 

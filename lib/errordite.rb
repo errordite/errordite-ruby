@@ -23,14 +23,11 @@ module Errordite
       end
     end
 
-    def record(error, context = {})
-      client.send_json '/receiveerror', Serializer.new(error, context).to_json
-    end
-
     def monitor(context = {})
       yield
     rescue Exception => e
-      record e, context
+      client.record e, context
+      raise e
     end
   end
 end
