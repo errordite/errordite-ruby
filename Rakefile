@@ -3,7 +3,7 @@ require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
-gems = ['errordite', 'errordite-rack']
+gems = ['errordite', 'errordite-rack', 'errordite-rails']
 gems.each do |gem|
   namespace gem do
     Bundler::GemHelper.install_tasks name: gem
